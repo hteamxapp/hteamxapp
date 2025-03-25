@@ -129,8 +129,12 @@
             const notification = `Gửi thông báo tới ${username}: ${message}`;
             localStorage.setItem('notification', notification);
 
-            // Chuyển hướng đến main.html
-            window.location.href = 'main.html';
+            // Hiển thị thông báo thành công
+            document.getElementById('alertMessage').innerText = 'Gửi thông báo thành công!';
+            
+            // Xóa nội dung của các input
+            document.getElementById('username').value = '';
+            document.getElementById('message').value = '';
         });
 
         document.getElementById('accountForm').addEventListener('submit', function(event) {
