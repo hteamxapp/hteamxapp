@@ -1,44 +1,51 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8" />
-  <title>Web Tài Khoản</title>
+  <meta charset="UTF-8">
+  <title>Đăng nhập / Đăng ký</title>
+  <style>
+    body { font-family: Arial; padding: 20px; }
+    input, button { margin: 5px 0; padding: 8px; }
+  </style>
 </head>
 <body>
-  <h2>Đăng ký / Đăng nhập</h2>
-  <input type="text" id="username" placeholder="Tên người dùng" />
-  <input type="password" id="password" placeholder="Mật khẩu" />
+  <h2>Đăng nhập hoặc Đăng ký</h2>
+  <input type="text" id="username" placeholder="Tên đăng nhập"><br>
+  <input type="password" id="password" placeholder="Mật khẩu"><br>
   <button onclick="login()">Đăng nhập</button>
   <button onclick="register()">Đăng ký</button>
 
-  <div id="home" style="display:none;">
-    <h3>Chào, <span id="userDisplay"></span></h3>
-    <p>Số dư: <span id="balance"></span> VND</p>
-  </div>
+  <p id="message"></p>
 
   <script>
-    const scriptURL = 'https://script.google.com/macros/s/PASTE_YOUR_DEPLOYED_URL_HERE/exec';
+    const API_URL = "https://script.google.com/macros/s/AKfycbwFdJKFgG4Y_m_dCwJEPd0bP0T9Zxbwj0ZiovHPPYAfIx5QH6REmXb7uqV-Sx99Y7E/exec";
 
-    async function register() {
-      const username = document.getElementById('username').value;
-      const password = document.getElementById('password').value;
-      const res = await fetch(`${scriptURL}?action=register&user=${username}&pass=${password}`);
-      const data = await res.json();
-      alert(data.message);
+    function login() {
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+
+      fetch(`${API_URL}?action=login&username=${username}&password=${password}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            localStorage.setItem("username", data.name);
+            localStorage.setItem("balance", data.balance);
+            window.location.href = "home.html";
+          } else {
+            document.getElementById("message").innerText = data.message;
+          }
+        });
     }
 
-    async function login() {
-      const username = document.getElementById('username').value;
-      const password = document.getElementById('password').value;
-      const res = await fetch(`${scriptURL}?action=login&user=${username}&pass=${password}`);
-      const data = await res.json();
-      if (data.success) {
-        document.getElementById('home').style.display = 'block';
-        document.getElementById('userDisplay').textContent = data.name;
-        document.getElementById('balance').textContent = data.balance;
-      } else {
-        alert(data.message);
-      }
+    function register() {
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+
+      fetch(`${API_URL}?action=register&username=${username}&password=${password}`)
+        .then(res => res.json())
+        .then(data => {
+          document.getElementById("message").innerText = data.message;
+        });
     }
   </script>
 </body>
