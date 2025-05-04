@@ -2,16 +2,75 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Đăng nhập / Đăng ký</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f2f2f2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      background: white;
+      padding: 24px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      width: 90%;
+      max-width: 400px;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 8px;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #45a049;
+    }
+
+    #message {
+      margin-top: 10px;
+      color: red;
+      text-align: center;
+    }
+  </style>
 </head>
 <body>
-  <h2>Trang Đăng nhập / Đăng ký</h2>
-  <input type="text" id="username" placeholder="Tên đăng nhập"><br>
-  <input type="password" id="password" placeholder="Mật khẩu"><br>
-  <button onclick="login()">Đăng nhập</button>
-  <button onclick="register()">Đăng ký</button>
-
-  <p id="message"></p>
+  <div class="container">
+    <h2>Đăng nhập / Đăng ký</h2>
+    <input type="text" id="username" placeholder="Tên đăng nhập">
+    <input type="password" id="password" placeholder="Mật khẩu">
+    <button onclick="login()">Đăng nhập</button>
+    <button onclick="register()">Đăng ký</button>
+    <p id="message"></p>
+  </div>
 
   <script>
     const API_URL = "https://script.google.com/macros/s/AKfycbyaIHDipbgbZSm0QgVhXOIbJqvNoh4r-zIISl9-TxVCFWELuiM-HvW0Sa5XPOHsRazW/exec";
@@ -20,30 +79,50 @@
       const username = document.getElementById("username").value;
       const password = document.getElementById("password").value;
 
-      fetch(`${API_URL}?action=login&username=${username}&password=${password}`)
-        .then(res => res.json())
-        .then(data => {
-          if (data.success) {
-            // Lưu thông tin tạm vào localStorage
-            localStorage.setItem("username", data.name);
-            localStorage.setItem("balance", data.balance);
-            // Chuyển sang trang home
-            window.location.href = "home.html";
-          } else {
-            document.getElementById("message").textContent = data.message;
-          }
-        });
+      fetch(API_URL, {
+        method: 'POST',
+        body: new URLSearchParams({
+          action: 'login',
+          username,
+          password
+        })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          localStorage.setItem("username", data.name);
+          localStorage.setItem("balance", data.balance);
+          window.location.href = "home.html";
+        } else {
+          document.getElementById("message").textContent = data.message;
+        }
+      })
+      .catch(error => {
+        document.getElementById("message").textContent = "Lỗi kết nối đến server.";
+        console.error(error);
+      });
     }
 
     function register() {
       const username = document.getElementById("username").value;
       const password = document.getElementById("password").value;
 
-      fetch(`${API_URL}?action=register&username=${username}&password=${password}`)
-        .then(res => res.json())
-        .then(data => {
-          document.getElementById("message").textContent = data.message;
-        });
+      fetch(API_URL, {
+        method: 'POST',
+        body: new URLSearchParams({
+          action: 'register',
+          username,
+          password
+        })
+      })
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById("message").textContent = data.message;
+      })
+      .catch(error => {
+        document.getElementById("message").textContent = "Lỗi kết nối đến server.";
+        console.error(error);
+      });
     }
   </script>
 </body>
