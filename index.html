@@ -80,8 +80,9 @@
           password
         })
       })
-      .then(res => res.json())
+      .then(response => response.json())
       .then(data => {
+        console.log(data); // Log the data received from API
         if (data.success) {
           localStorage.setItem("username", data.name);
           localStorage.setItem("balance", data.balance);
@@ -92,7 +93,7 @@
       })
       .catch(error => {
         document.getElementById("message").textContent = "Lỗi kết nối đến server.";
-        console.error(error);
+        console.error('Error:', error);
       });
     }
 
@@ -108,13 +109,14 @@
           password
         })
       })
-      .then(res => res.json())
+      .then(response => response.json())
       .then(data => {
+        console.log(data); // Log the data received from API
         document.getElementById("message").textContent = data.message;
       })
       .catch(error => {
         document.getElementById("message").textContent = "Lỗi kết nối đến server.";
-        console.error(error);
+        console.error('Error:', error);
       });
     }
   </script>
