@@ -1,86 +1,45 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Đăng Nhập</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            padding: 20px;
-        }
-        h1 {
-            text-align: center;
-        }
-        .container {
-            max-width: 400px;
-            margin: auto;
-            background: white;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        input[type="text"], input[type="password"] {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            width: 100%;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <title>Web Tài Khoản</title>
 </head>
 <body>
+  <h2>Đăng ký / Đăng nhập</h2>
+  <input type="text" id="username" placeholder="Tên người dùng" />
+  <input type="password" id="password" placeholder="Mật khẩu" />
+  <button onclick="login()">Đăng nhập</button>
+  <button onclick="register()">Đăng ký</button>
 
-    <div class="container">
-        <h1>Đăng Nhập</h1>
-        <form id="loginForm">
-            <label for="username">Tên Đăng Nhập:</label>
-            <input type="text" id="username" name="username" required>
+  <div id="home" style="display:none;">
+    <h3>Chào, <span id="userDisplay"></span></h3>
+    <p>Số dư: <span id="balance"></span> VND</p>
+  </div>
 
-            <label for="password">Mật Khẩu:</label>
-            <input type="password" id="password" name="password" required>
+  <script>
+    const scriptURL = 'https://script.google.com/macros/s/PASTE_YOUR_DEPLOYED_URL_HERE/exec';
 
-            <button type="submit">Đăng Nhập</button>
-        </form>
-    </div>
+    async function register() {
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      const res = await fetch(`${scriptURL}?action=register&user=${username}&pass=${password}`);
+      const data = await res.json();
+      alert(data.message);
+    }
 
-    <script>
-        document.getElementById('loginForm').addEventListener('submit', function(event) {
-            event.preventDefault(); // Ngăn chặn gửi form mặc định
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-
-            // Kiểm tra thông tin đăng nhập
-            if (username === "admin" && password === "admin") {
-                // Nếu là admin, chuyển hướng đến admin.html
-                window.location.href = 'admin.html';
-            } else {
-                const accounts = JSON.parse(localStorage.getItem('accounts')) || [];
-                const user = accounts.find(u => u.username === username && u.password === password);
-                if (user) {
-                    // Lưu thông tin người dùng vào localStorage
-                    localStorage.setItem('currentUser', JSON.stringify(user));
-                    // Chuyển hướng đến main.html
-                    window.location.href = 'main.html';
-                } else {
-                    alert('Tên đăng nhập hoặc mật khẩu không đúng.');
-                }
-            }
-        });
-    </script>
-
+    async function login() {
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      const res = await fetch(`${scriptURL}?action=login&user=${username}&pass=${password}`);
+      const data = await res.json();
+      if (data.success) {
+        document.getElementById('home').style.display = 'block';
+        document.getElementById('userDisplay').textContent = data.name;
+        document.getElementById('balance').textContent = data.balance;
+      } else {
+        alert(data.message);
+      }
+    }
+  </script>
 </body>
 </html>
