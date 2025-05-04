@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Trang chủ</title>
+  <style>
+    body { font-family: Arial; padding: 20px; }
+    .menu button { margin-right: 10px; }
+  </style>
+</head>
+<body>
+  <h2>Chào, <span id="username"></span></h2>
+  <p>Số dư: <strong id="balance"></strong> VNĐ</p>
+
+  <div class="menu">
+    <button onclick="alert('Chức năng nạp tiền')">Nạp tiền</button>
+    <button onclick="alert('Chức năng rút tiền')">Rút tiền</button>
+  </div>
+
+  <script>
+    const username = localStorage.getItem("username");
+    const balance = localStorage.getItem("balance");
+
+    if (!username) {
+      window.location.href = "index.html";
+    } else {
+      document.getElementById("username").innerText = username;
+      document.getElementById("balance").innerText = balance;
+    }
+  </script>
+</body>
+</html>
