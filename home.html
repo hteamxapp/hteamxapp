@@ -1,31 +1,29 @@
 <!DOCTYPE html>
-<html>
+<html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Trang chủ</title>
-  <style>
-    body { font-family: Arial; padding: 20px; }
-    .menu button { margin-right: 10px; }
-  </style>
+  <title>Trang Chủ</title>
 </head>
 <body>
-  <h2>Chào, <span id="username"></span></h2>
-  <p>Số dư: <strong id="balance"></strong> VNĐ</p>
+  <h2>Xin chào, <span id="name"></span></h2>
+  <p>Số dư: <span id="balance"></span></p>
 
-  <div class="menu">
-    <button onclick="alert('Chức năng nạp tiền')">Nạp tiền</button>
-    <button onclick="alert('Chức năng rút tiền')">Rút tiền</button>
-  </div>
+  <h3>Menu</h3>
+  <ul>
+    <li><button onclick="napTien()">Nạp tiền</button></li>
+    <li><button onclick="rutTien()">Rút tiền</button></li>
+  </ul>
 
   <script>
-    const username = localStorage.getItem("username");
-    const balance = localStorage.getItem("balance");
+    document.getElementById("name").textContent = localStorage.getItem("username") || "Chưa đăng nhập";
+    document.getElementById("balance").textContent = localStorage.getItem("balance") || "0";
 
-    if (!username) {
-      window.location.href = "index.html";
-    } else {
-      document.getElementById("username").innerText = username;
-      document.getElementById("balance").innerText = balance;
+    function napTien() {
+      alert("Chức năng nạp tiền sẽ thêm sau");
+    }
+
+    function rutTien() {
+      alert("Chức năng rút tiền sẽ thêm sau");
     }
   </script>
 </body>
