@@ -2,29 +2,59 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Trang Chủ</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trang người dùng</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f0f0f0;
+      padding: 20px;
+      margin: 0;
+    }
+    .card {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      max-width: 500px;
+      margin: auto;
+    }
+    h2, p {
+      text-align: center;
+    }
+    .menu {
+      margin-top: 20px;
+      display: flex;
+      justify-content: space-around;
+    }
+    .menu button {
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      background-color: #2196F3;
+      color: white;
+    }
+    .menu button:hover {
+      background-color: #0b7dda;
+    }
+  </style>
 </head>
 <body>
-  <h2>Xin chào, <span id="name"></span></h2>
-  <p>Số dư: <span id="balance"></span></p>
+  <div class="card">
+    <h2>Chào, <span id="username">...</span></h2>
+    <p>Số dư: <span id="balance">0</span> VNĐ</p>
 
-  <h3>Menu</h3>
-  <ul>
-    <li><button onclick="napTien()">Nạp tiền</button></li>
-    <li><button onclick="rutTien()">Rút tiền</button></li>
-  </ul>
+    <div class="menu">
+      <button onclick="alert('Chức năng nạp tiền đang phát triển')">Nạp tiền</button>
+      <button onclick="alert('Chức năng rút tiền đang phát triển')">Rút tiền</button>
+    </div>
+  </div>
 
   <script>
-    document.getElementById("name").textContent = localStorage.getItem("username") || "Chưa đăng nhập";
+    document.getElementById("username").textContent = localStorage.getItem("username") || "Người dùng";
     document.getElementById("balance").textContent = localStorage.getItem("balance") || "0";
-
-    function napTien() {
-      alert("Chức năng nạp tiền sẽ thêm sau");
-    }
-
-    function rutTien() {
-      alert("Chức năng rút tiền sẽ thêm sau");
-    }
   </script>
 </body>
 </html>
