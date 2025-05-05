@@ -1,62 +1,51 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trang Chính</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            padding: 20px;
-        }
-        .container {
-            max-width: 600px;
-            margin: auto;
-            background: white;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        .notification {
-            background-color: #e7f3fe;
-            color: #31708f;
-            padding: 15px;
-            margin: 20px 0;
-            border: 1px solid #bcdff1;
-            border-radius: 5px;
-        }
-    </style>
+  <title>Main Page</title>
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const username = urlParams.get('username');
+    let balance = parseFloat(urlParams.get('balance'));
+
+    function updateBalanceDisplay() {
+      document.getElementById('balance').innerText = balance;
+    }
+
+    function deposit() {
+      const amount = parseFloat(document.getElementById('amount').value);
+      if (amount > 0) {
+        google.script.run.withSuccessHandler(function(response) {
+          if (response.success) {
+            balance = response.balance;
+            updateBalanceDisplay();
+          } else {
+            alert(response.msg);
+          }
+        }).updateBalance(username, amount);
+      }
+    }
+
+    function withdraw() {
+      const amount = parseFloat(document.getElementById('amount').value);
+      if (amount > 0) {
+        google.script.run.withSuccessHandler(function(response) {
+          if (response.success) {
+            balance = response.balance;
+            updateBalanceDisplay();
+          } else {
+            alert(response.msg);
+          }
+        }).updateBalance(username, -amount);
+      }
+    }
+  </script>
 </head>
-<body>
-
-    <div class="container">
-        <h1>HTeam App</h1>
-        <div id="userInfo"></div>
-        <div id="notification"></div>
-    </div>
-
-    <script>
-        const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-        if (!currentUser) {
-            window.location.href = 'login.html';
-        } else {
-            const userInfo = `
-                <p>Tên Đăng Nhập: <strong>${currentUser.username}</strong></p>
-                <p>Số Dư HTC: <strong>${currentUser.balance}</strong></p>
-            `;
-            document.getElementById('userInfo').innerHTML = userInfo;
-        }
-
-        // Hiển thị thông báo nếu có
-        const notification = localStorage.getItem('notification');
-        if (notification) {
-            document.getElementById('notification').innerHTML = 
-                `<div class="notification">${notification}</div>`;
-            // Xóa thông báo khỏi localStorage sau khi hiển thị
-            localStorage.removeItem('notification');
-        }
-    </script>
-
+<body onload="updateBalanceDisplay()">
+  <h2>Welcome, <span id="usernameDisplay"></span></h2>
+  <p>Balance: <span id="balance"></span></p>
+  <input id="amount" type="number" placeholder="Amount"><br>
+  <button onclick="deposit()">Deposit</button>
+  <button onclick="withdraw()">Withdraw</button>
 </body>
 </html>
+
