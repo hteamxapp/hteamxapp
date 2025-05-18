@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Trò 1 - Xúc Xắc - HTEAM X</title>
+  <link rel="stylesheet" href="main-style.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #0c0c0c;
+      color: white;
+      padding: 20px;
+    }
+    h2, h3 { color: lime; }
+    .side-button {
+      background-color: black;
+      color: lime;
+      font-size: 18px;
+      padding: 10px 20px;
+      border: 2px solid lime;
+      border-radius: 8px;
+      cursor: pointer;
+      margin: 5px;
+      transition: background-color 0.3s, color 0.3s;
+    }
+    .side-button:hover {
+      background-color: lime;
+      color: black;
+    }
+    #dice-box {
+      padding: 20px;
+      background-color: #111;
+      border: 2px dashed lime;
+      text-align: center;
+      font-size: 20px;
+    }
+    input[type="number"] {
+      padding: 10px;
+      border: 2px solid lime;
+      border-radius: 5px;
+      background-color: #111;
+      color: lime;
+      width: 80%;
+      margin-top: 10px;
+    }
+    input[type="number"]:focus {
+      outline: none;
+      border-color: lime;
+    }
+  </style>
+</head>
+<body>
+  <h2>Trò 1: Tài Xỉu - Tự động mỗi 60s</h2>
+  <p><b>Luật chơi:</b> Tổng 3 xúc xắc > 10 là Tài, ≤ 10 là Xỉu. </p>
+
+  <div style="display: flex; justify-content: space-evenly; align-items: center; margin-top: 20px;">
+    <div style="text-align: center;">
+      <input type="number" id="bet-A" placeholder="Nhập cược A" />
+      <button class="side-button" onclick="placeBet('A')">TÀI</button>
+    </div>
+
+    <div style="text-align: center;">
+      <div id="dice-box">Chờ vòng mới...</div>
+      <div><span>Thời gian:</span> <span id="countdown">60</span>s</div>
+      <div id="dice-result"></div>
+      <div id="winner-result" style="margin-top: 10px;"></div>
+    </div>
+
+    <div style="text-align: center;">
+      <input type="number" id="bet-B" placeholder="Nhập cược B" />
+      <button class="side-button" onclick="placeBet('B')">XỈU</button>
+    </div>
+  </div>
+
+  <div style="text-align: center; margin-top: 20px;">
+    <div>Lịch sử kết quả:</div>
+    <div id="history-data">---</div>
+  </div>
+
+  <script>
+    let totalBetA = 0;
+    let totalBetB = 0;
+    let historyData = [];
+    let countdown = 60;
+
+    function placeBet(side) {
+      const input = document.getElementById(`bet-${side}`);
+      const value = parseFloat(input.value);
+      if (isNaN(value) || value <= 0) {
+        alert("Vui lòng nhập số tiền hợp lệ.");
+        return;
+      }
+      if (side === "A") totalBetA += value;
+      else totalBetB += value;
+      input.value = "";
+      alert(`Đã cược ${value} vào bên ${side}`);
+    }
+
+    function startRound() {
+      const countdownDisplay = document.getElementById('countdown');
+      const diceBox = document.getElementById('dice-box');
+      const resultDisplay = document.getElementById('dice-result');
+      const winnerDisplay = document.getElementById('winner-result');
+      const historyDisplay = document.getElementById('history-data');
+
+      countdown = 60;
+      countdownDisplay.innerText = countdown;
+      resultDisplay.innerText = '';
+      winnerDisplay.innerText = '';
+      diceBox.innerText = "Đang rung xúc xắc...";
+
+      const timer = setInterval(() => {
+        countdown--;
+        countdownDisplay.innerText = countdown;
+
+        if (countdown === 10) {
+          winnerDisplay.innerText = "Đóng cược!";
+        }
+
+        if (countdown <= 0) {
+          clearInterval(timer);
+
+          // Luật: bên cược nhiều hơn sẽ thua
+          let winner;
+          if (totalBetA > totalBetB) winner = "B";
+          else if (totalBetB > totalBetA) winner = "A";
+          else winner = Math.random() < 0.5 ? "A" : "B";
+
+          // Tạo xúc xắc phù hợp
+          let dice, sum;
+          do {
+            dice = [
+              Math.floor(Math.random() * 6) + 1,
+              Math.floor(Math.random() * 6) + 1,
+              Math.floor(Math.random() * 6) + 1
+            ];
+            sum = dice.reduce((a, b) => a + b, 0);
+          } while ((winner === "A" && sum <= 10) || (winner === "B" && sum > 10));
+
+          diceBox.innerText = `Xúc xắc: ${dice.join(", ")}`;
+          resultDisplay.innerText = `Tổng: ${sum}`;
+          winnerDisplay.innerText = `Bên thắng: ${winner}`;
+
+          // Thêm vào lịch sử
+          historyData.unshift(winner);
+          if (historyData.length > 10) historyData.pop();
+          historyDisplay.innerText = "Lịch sử: " + historyData.join(" - ");
+
+          // Reset cược
+          totalBetA = 0;
+          totalBetB = 0;
+
+          // Bắt đầu vòng tiếp theo
+          setTimeout(startRound, 2000);
+        }
+      }, 1000);
+    }
+
+    // Bắt đầu khi load trang
+    window.onload = startRound;
+  </script>
+</body>
+</html>
