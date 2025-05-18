@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Tài Khoản - HTEAM X</title>
+  <link rel="stylesheet" href="main-style.css">
+</head>
+<body>
+  <div class="header">
+    <div>HTEAM X</div>
+    <div class="menu-icon" onclick="toggleMenu()">
+      <div></div><div></div><div></div>
+    </div>
+    <div class="dropdown" id="menu">
+      <a href="hteamxservice.html">HTeam X Service</a>
+      <a href="dautu.html">Đầu tư</a>
+      <a href="trochoi.html">Trò Chơi</a>
+      <a href="naptien.html">Nạp Tiền</a>
+      <a href="ruttien.html">Rút Tiền</a>
+      <a href="taikhoan.html">Tài Khoản</a>
+      <a href="index.html">Đăng Xuất</a>
+    </div>
+  </div>
+
+  <div class="content user-info">
+    <h2>Chỉnh sửa tài khoản</h2>
+    <form>
+      <label>Ảnh đại diện:</label><br><input type="file"><br><br>
+      <label>Tên tài khoản:</label><br><input type="text"><br><br>
+      <label>Mật khẩu cũ:</label><br><input type="password"><br>
+      <label>Mật khẩu mới:</label><br><input type="password"><br>
+      <label>Xác nhận mật khẩu mới:</label><br><input type="password"><br><br>
+      <button type="submit">Đặt lại</button>
+    </form>
+  </div>
+
+  <script>
+    function toggleMenu() {
+      const menu = document.getElementById("menu");
+      menu.style.display = menu.style.display === "block" ? "none" : "block";
+    }
+    document.addEventListener("click", function(event) {
+      const menu = document.getElementById("menu");
+      const icon = document.querySelector(".menu-icon");
+      if (!menu.contains(event.target) && !icon.contains(event.target)) {
+        menu.style.display = "none";
+      }
+    });
+  </script>
+</body>
+</html>

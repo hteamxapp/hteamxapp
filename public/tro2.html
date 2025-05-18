@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Trò 2 - HTEAM X</title>
+  <link rel="stylesheet" href="main-style.css">
+  <style>
+    body { font-family: Arial, sans-serif; background-color: #0c0c0c; color: white; padding: 20px; }
+    .header { display: flex; justify-content: space-between; align-items: center; padding: 10px; background-color: #222; }
+    .header div { font-size: 24px; color: lime; }
+    .content { margin-top: 20px; }
+    h2, h3 { color: lime; }
+    .side-button { background-color: black; color: lime; font-size: 18px; padding: 10px 20px; border: 2px solid lime; border-radius: 8px; cursor: pointer; margin: 5px; transition: background-color 0.3s, color 0.3s; }
+    .side-button:hover { background-color: lime; color: black; }
+    #progress-bar { transition: width 0.5s ease-in-out; height: 20px; background-color: lime; }
+    #progress-bar-container { width: 100%; background-color: #222; margin-top: 10px; }
+  </style>
+  <script>
+    function toggleMenu() {
+      const menu = document.getElementById("menu");
+      menu.style.display = menu.style.display === "block" ? "none" : "block";
+    }
+
+    document.addEventListener("click", function(event) {
+      const menu = document.getElementById("menu");
+      const icon = document.querySelector(".menu-icon");
+      if (!menu.contains(event.target) && !icon.contains(event.target)) {
+        menu.style.display = "none";
+      }
+    });
+
+    function startProgressGame() {
+      const progressBar = document.getElementById('progress-bar');
+      const result = document.getElementById('progress-result');
+      const percentage = document.getElementById('progress-percentage');
+      let progress = 0;
+      let participants = Math.floor(Math.random() * 6) + 15;
+
+      const interval = setInterval(() => {
+        let increment = 100 / participants;
+        if (progress < 100) {
+          progress += increment;
+          progressBar.style.width = progress + "%";
+          percentage.innerText = Math.round(progress) + "%";
+        } else {
+          clearInterval(interval);
+          result.innerText = "Chúc mừng người thắng cuộc đã được chọn!";
+        }
+      }, 800);
+    }
+
+    function joinGame() {
+      alert("Bạn đã tham gia trò chơi!");
+      startProgressGame();
+    }
+  </script>
+</head>
+<body>
+  <div class="header">
+    <div>HTEAM X</div>
+    <div class="menu-icon" onclick="toggleMenu()"><div></div><div></div><div></div></div>
+    <div class="dropdown" id="menu">
+      <a href="hteamxservice.html">HTeam X Service</a>
+      <a href="dautu.html">Đầu tư</a>
+      <a href="tro1.html">Trò 1</a>
+      <a href="tro2.html">Trò 2</a>
+      <a href="naptien.html">Nạp Tiền</a>
+      <a href="ruttien.html">Rút Tiền</a>
+      <a href="taikhoan.html">Tài Khoản</a>
+      <a href="index.html">Đăng Xuất</a>
+    </div>
+  </div>
+
+  <div class="content">
+    <h2>Trò 2: Tiến Trình</h2>
+    <p>Cần 15–20 người tham gia, hệ thống sẽ chọn 1 người ngẫu nhiên thắng x10.</p>
+
+    <button class="side-button" onclick="joinGame()">Tham gia trò chơi</button>
+
+    <div id="progress-bar-container">
+      <div id="progress-bar" style="width: 0%;"></div>
+    </div>
+    <div style="margin-top: 10px; text-align: center;">
+      <span id="progress-percentage">0%</span>
+    </div>
+    <div id="progress-result" style="margin-top: 10px;"></div>
+  </div>
+</body>
+</html>
