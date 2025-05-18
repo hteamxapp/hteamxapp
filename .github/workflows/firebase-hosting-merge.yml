@@ -12,6 +12,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - run: npm install -g firebase-tools
-
-      - run: firebase deploy --only hosting --project hteamxapp-2d851 --token "${{ secrets.HTEAMX }}"
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: "${{ secrets.GITHUB_TOKEN }}"
+          firebaseServiceAccount: "${{ secrets.HTEAMX }}"
+          channelId: live
+          projectId: hteamxapp-2d851
